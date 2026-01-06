@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Plataforma de Empleabilidad</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <header class="header">
+    <div class="brand">
+      <h1>Empleabilidad Riwi</h1>
+      <p>Vacantes centralizadas, postulaciones trazables.</p>
+    </div>
+    <nav class="nav">
+      <button class="nav-btn" data-target="home">Inicio</button>
+      <button class="nav-btn" data-target="auth">Auth</button>
+      <button class="nav-btn" data-target="vacancies">Vacantes</button>
+      <button class="nav-btn" data-target="applications">Postulaciones</button>
+      <button class="nav-btn" data-target="manage">Gestionar vacantes</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- Vista: Inicio con dos secciones decorativas -->
+    <section id="home" class="view active">
+      <div class="hero">
+        <div class="hero-text">
+          <h2>Impulsa tu carrera con oportunidades reales</h2>
+          <p>Explora vacantes curadas por el equipo de empleabilidad y postúlate en segundos. Tu crecimiento, en un solo lugar.</p>
+          <ul class="benefits">
+            <li><strong>Visibilidad:</strong> Vacantes verificadas y actualizadas.</li>
+            <li><strong>Autonomía:</strong> Postúlate sin intermediarios.</li>
+            <li><strong>Métricas:</strong> Seguimiento de tus aplicaciones.</li>
+          </ul>
+        </div>
+        <div class="hero-art">
+          <div class="card ad">
+            <h3>Tu talento merece ser visto</h3>
+            <p>Conéctate con empresas que usan las tecnologías que te apasionan.</p>
+          </div>
+          <div class="card ad alt">
+            <h3>Postula sin fricción</h3>
+            <p>JWT + API Key para un proceso seguro y directo.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="promo">
+        <h3>Historias de éxito</h3>
+        <p>Más de 300 coders insertados laboralmente en roles de backend, frontend y fullstack.</p>
+        <div class="promo-grid">
+          <div class="promo-item">
+            <strong>Backend NestJS</strong>
+            <p>Vacantes con Node.js, TypeScript y PostgreSQL.</p>
+          </div>
+          <div class="promo-item">
+            <strong>Frontend React</strong>
+            <p>Empresas que valoran tu stack moderno.</p>
+          </div>
+          <div class="promo-item">
+            <strong>Datos y métricas</strong>
+            <p>Monitorea tus postulaciones y resultados.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Vista: Autenticación y Registro -->
+    <section id="auth" class="view">
+      <h2>Autenticación</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Registro Coder</h3>
+          <form id="registerForm">
+            <label>Nombre
+              <input type="text" name="name" placeholder="Tu nombre" required />
+            </label>
+            <label>Email
+              <input type="email" name="email" placeholder="tu@correo.com" required />
+            </label>
+            <label>Contraseña
+              <input type="password" name="password" placeholder="********" required />
+            </label>
+            <button type="submit">Registrar</button>
+          </form>
+          <div id="registerResult" class="result"></div>
+        </div>
+
+        <div class="card">
+          <h3>Login (Coder / Gestor / Admin)</h3>
+          <form id="loginForm">
+            <label>Email
+              <input type="email" name="email" placeholder="tu@correo.com" required />
+            </label>
+            <label>Contraseña
+              <input type="password" name="password" placeholder="********" required />
+            </label>
+            <button type="submit">Iniciar sesión</button>
+          </form>
+          <div id="loginResult" class="result"></div>
+
+          <div class="session">
+            <p><strong>Sesión:</strong> <span id="sessionRole">N/A</span></p>
+            <p><strong>Token:</strong> <span id="sessionToken">N/A</span></p>
+            <button id="logoutBtn" class="secondary">Cerrar sesión</button>
+          </div>
+
+          <div class="apikey">
+            <label>API Key (x-api-key)
+              <input type="text" id="apiKeyInput" placeholder="Ingresa tu API Key" />
+            </label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Vista: Vacantes -->
+    <section id="vacancies" class="view">
+      <h2>Vacantes disponibles</h2>
+      <div class="filters card">
+        <div class="grid-3">
+          <label>Tecnología
+            <input type="text" id="filterTech" placeholder="Ej: NestJS" />
+          </label>
+          <label>Seniority
+            <input type="text" id="filterSeniority" placeholder="Ej: Junior" />
+          </label>
+          <label>Ubicación
+            <select id="filterLocation">
+              <option value="">Todas</option>
+              <option>Medellín</option>
+              <option>Barranquilla</option>
+              <option>Bogotá</option>
+              <option>Cartagena</option>
+            </select>
+          </label>
+        </div>
+        <button id="loadVacanciesBtn">Cargar vacantes</button>
+      </div>
+
+      <div id="vacancyList" class="cards"></div>
+      <div id="vacanciesResult" class="result"></div>
+    </section>
+
+    <!-- Vista: Postulaciones -->
+    <section id="applications" class="view">
+      <h2>Postulaciones</h2>
+      <div class="card">
+        <p>Selecciona una vacante y postúlate si hay cupo disponible.</p>
+        <form id="applyForm">
+          <label>ID de Vacante
+            <input type="number" id="applyVacancyId" placeholder="Ej: 12" required />
+          </label>
+          <button type="submit">Postularse</button>
+        </form>
+        <div id="applyResult" class="result"></div>
+      </div>
+
+      <div class="card">
+        <h3>Listar mis postulaciones (Coder)</h3>
+        <button id="listMyApplicationsBtn">Cargar mis postulaciones</button>
+        <div id="myApplications" class="cards"></div>
+      </div>
+    </section>
+
+    <!-- Vista: Gestión de vacantes (Gestor/Admin) -->
+    <section id="manage" class="view">
+      <h2>Gestionar vacantes</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Crear vacante</h3>
+          <form id="createVacancyForm">
+            <label>Título
+              <input type="text" name="title" required />
+            </label>
+            <label>Descripción
+              <textarea name="description" required></textarea>
+            </label>
+            <label>Tecnologías (separadas por coma)
+              <input type="text" name="technologies" placeholder="NestJS, TypeORM" required />
+            </label>
+            <label>Seniority
+              <input type="text" name="seniority" placeholder="Junior/Mid/Senior" required />
+            </label>
+            <label>Soft skills
+              <input type="text" name="softSkills" placeholder="Comunicación, trabajo en equipo" required />
+            </label>
+            <label>Ubicación
+              <select name="location" required>
+                <option>Medellín</option>
+                <option>Barranquilla</option>
+                <option>Bogotá</option>
+                <option>Cartagena</option>
+              </select>
+            </label>
+            <label>Modalidad
+              <select name="modality" required>
+                <option value="REMOTO">REMOTO</option>
+                <option value="HIBRIDO">HIBRIDO</option>
+                <option value="PRESENCIAL">PRESENCIAL</option>
+              </select>
+            </label>
+            <label>Rango salarial
+              <input type="text" name="salaryRange" placeholder="$4M - $6M" required />
+            </label>
+            <label>Empresa
+              <input type="text" name="company" placeholder="Empresa S.A." required />
+            </label>
+            <label>Cupo máximo de aspirantes
+              <input type="number" name="maxApplicants" min="1" required />
+            </label>
+            <button type="submit">Crear vacante</button>
+          </form>
+          <div id="createVacancyResult" class="result"></div>
+        </div>
+
+        <div class="card">
+          <h3>Actualizar vacante</h3>
+          <form id="updateVacancyForm">
+            <label>ID de vacante
+              <input type="number" name="id" required />
+            </label>
+            <label>Nuevo cupo máximo
+              <input type="number" name="maxApplicants" min="1" required />
+            </label>
+            <button type="submit">Actualizar cupo</button>
+          </form>
+          <div id="updateVacancyResult" class="result"></div>
+
+          <h3>Activar/Inactivar vacante</h3>
+          <form id="toggleVacancyForm">
+            <label>ID de vacante
+              <input type="number" name="id" required />
+            </label>
+            <label>Estado
+              <select name="active" required>
+                <option value="true">Activar</option>
+                <option value="false">Inactivar</option>
+              </select>
+            </label>
+            <button type="submit">Actualizar estado</button>
+          </form>
+          <div id="toggleVacancyResult" class="result"></div>
+
+          <h3>Listar postulaciones (Gestor/Admin)</h3>
+          <form id="listApplicationsForm">
+            <label>ID de vacante
+              <input type="number" name="vacancyId" required />
+            </label>
+            <button type="submit">Listar</button>
+          </form>
+          <div id="listApplicationsResult" class="result"></div>
+          <div id="applicationsList" class="cards"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 Riwi Empleabilidad. Construido con HTML, CSS y JS.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
